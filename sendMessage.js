@@ -14,7 +14,16 @@ async function publishMessage(id, text) {
       // The token you used to initialize your app
       token: process.env.SLACK_BOT_TOKEN,
       channel: id,
-      text: text
+      text: text,
+			blocks: [
+				{
+					"type": "section",
+					"text": {
+						"type": "plain_text",
+						"text": text,
+					}
+				}
+			]
       // You could also use a blocks[] array to send richer content
     });
 
