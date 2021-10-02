@@ -7,18 +7,26 @@ const githubTrends = require('github-trends-api')
 const port = process.env.PORT || 3400
 
 app.get('/api/v1/', (req, res) => {
-	try {
-		const trends = githubTrends({ section: 'developers', since: 'weekly' }).then(
-			result => { 
-				console.log(result)
-				res.json(result)
-			}
-		).catch(
-			error => { console.log(error) }
-		)
-	} catch (err) {
-		console.log(err.message);
+
+	const get_trends = async () => {
+		try {
+			const response = await githubTrends({ section: 'developers', since: 'weekly' })
+
+			// console.log(typeof trends)
+
+			const trends = (Object.entries(response).map((trend) => {
+				return trend[1]
+			}));
+
+			console.log(trends)
+
+			res.json(trends);
+		} catch (error) {
+			res.send(error.message)
+		}
 	}
+
+	get_trends();
 
 })
 
