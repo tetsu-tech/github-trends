@@ -1,37 +1,42 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
+const http = require('http');
+const sendMessage = require('./sendMessage');
 
 const githubTrends = require('github-trends-api')
 
 const port = process.env.PORT || 3400
 
-app.get('/api/v1/', (req, res) => {
+const id = process.env.CHANNEL_ID;
 
-	const getTrends = async () => {
-		try {
-			const response = await githubTrends({ section: 'developers', since: 'weekly' })
+const getTrends = async () => {
+	try {
+		const response = await githubTrends({ section: 'developers', since: 'weekly' })
 
-			const trends = (Object.entries(response).map((trend) => {
-				return trend[1]
-			}));
+		const trends = (Object.entries(response).map((trend) => {
+			return trend[1]
+		}));
 
-			const repoUrls = trends.map((repoUrl) => {
-				return repoUrl.repourl
-			})
+		const repoUrls = trends.map((repoUrl) => {
+			return repoUrl.repourl
+		})
 
-			console.log(trends)
-
-			// res.json(trends[0]);
-			res.json(repoUrls);
-		} catch (error) {
-			res.send(error.message)
+		// sendMessageをループするもの呼び出して。repoUrlのindexを引数に入れる
+		const loop = () => {
+			for(let i = 0; i < 10; i++) {
+				sendMessage(id, repoUrls[i])
+			}
 		}
+
+		loop();
+
+	} catch (error) {
+		console.log(error)
+		process.exit(1);
 	}
+}
 
+const server = http.createServer(function(req, res) {
 	getTrends();
-
-})
-
-app.listen(port);
-console.log('listen on port ' + port);
+	res.end('success')
+}).listen(port);
