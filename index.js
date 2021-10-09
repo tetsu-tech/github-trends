@@ -1,13 +1,15 @@
-const express = require('express');
-const app = express();
 const http = require('http');
 const sendMessage = require('./sendMessage');
+require('dotenv').config();
 
 const githubTrends = require('github-trends-api')
 
 const port = process.env.PORT || 3400
 
-const id = process.env.CHANNEL_ID;
+// テスト
+const id = process.env.TEST_CHANNEL_ID;
+// 本番
+// const id = process.env.CHANNEL_ID;
 
 const getTrends = async () => {
 	try {
