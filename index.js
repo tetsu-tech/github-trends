@@ -11,7 +11,7 @@ const id = process.env.TEST_CHANNEL_ID;
 // 本番
 // const id = process.env.CHANNEL_ID;
 
-const getTrends = async () => {
+const getTrends = http.createServer(async (req, res) => {
 	try {
 		const response = await githubTrends({ section: 'developers', since: 'weekly' })
 
@@ -23,6 +23,8 @@ const getTrends = async () => {
 			return repoUrl.repourl
 		})
 
+		console.log(trends)
+
 		// sendMessageをループするもの呼び出して。repoUrlのindexを引数に入れる
 		const loop = () => {
 			for(let i = 0; i < 10; i++) {
@@ -32,13 +34,10 @@ const getTrends = async () => {
 
 		loop();
 
+		res.end(JSON.stringify(repoUrls))
+
 	} catch (error) {
 		console.log(error)
 		process.exit(1);
 	}
-}
-
-const server = http.createServer(function(req, res) {
-	getTrends();
-	res.end('success')
 }).listen(port);
