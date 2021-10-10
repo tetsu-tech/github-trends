@@ -9,9 +9,9 @@ const githubTrends = require('github-trends-api')
 const port = process.env.PORT || 3400
 
 // テスト
-const id = process.env.TEST_CHANNEL_ID;
+// const id = process.env.TEST_CHANNEL_ID;
 // 本番
-// const id = process.env.CHANNEL_ID;
+const id = process.env.CHANNEL_ID;
 
 const getTrends = http.createServer(async (req, res) => {
 	try {
