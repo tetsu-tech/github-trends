@@ -1,3 +1,5 @@
+const express = require('express');
+const api = express();
 const http = require('http');
 const sendMessage = require('./sendMessage');
 require('dotenv').config();
@@ -22,8 +24,6 @@ const getTrends = http.createServer(async (req, res) => {
 		const repoUrls = trends.map((repoUrl) => {
 			return repoUrl.repourl
 		})
-
-		console.log(trends)
 
 		// sendMessageをループするもの呼び出して。repoUrlのindexを引数に入れる
 		const loop = () => {

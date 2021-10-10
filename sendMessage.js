@@ -19,7 +19,6 @@ const sendMessage = async (id, url) => {
 			attachments: url,
 		});
 
-		// console.log(result);
 	} catch (error) {
     console.error(error);
 	}
